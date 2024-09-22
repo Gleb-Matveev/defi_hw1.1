@@ -1,9 +1,58 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, Component } from 'react';
 import { ethers } from "ethers";
+import pic from './ethlogo.png';
+import { Buffer } from 'buffer';
 import "./App.css";
 
 
-function App() {
+class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = { 
+      buffer: null 
+    };
+  }
+
+  captureFile = (event) => {
+    event.preventDefault()
+    console.log('file captured');
+
+    const file = event.target.files[0];
+    const reader = new window.FileReader()
+    reader.readAsArrayBuffer(file)
+    reader.onloadend = () => {
+      this.setState({ buffer : Buffer(reader.result) })
+      //console.log('buffer', myBuffer)
+    }
+
+    console.log(event.target.files[0]);
+  }
+
+  onSubmit = (event) => {
+    event.preventDefault();
+    console.log("submittimg form");
+  }
+
+  render () {
+    return (
+      <div className="App">
+        <div className="row mt-5">
+
+            <img src={pic} alt="logo"/>
+
+            <h2>Change picture</h2>
+            <form onSubmit={this.onSubmit} >
+              <input type='file' onChange={this.captureFile}/>
+              <input type='submit'/>
+            </form>
+
+        </div>
+      </div>
+    );
+  }
+}
+    /*function App() {
     const url = "http://127.0.0.1:8545/";
     const address = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
     let provider = ethers.getDefaultProvider(url);
@@ -106,7 +155,6 @@ function App() {
     const [storedPrice, setStoredPrice] = useState('');
     const [newPrice, setNewPrice] = useState('');
 
-
     const getStockValue = async () => {
       try {
         var contractPrice = await contract_read.getStockValue();
@@ -152,49 +200,15 @@ function App() {
               </button>
             </div>
 
+            <h2>Change picture</h2>
+            <form>
+              <input type='file' onChange={this.captureFile}/>
+              <input type='submit' />
+            </form>
+
         </div>
       </div>
     );
-}
+}*/
 
 export default App;
-
-  /*
-  <div className="col">
-            <h3>Test value: {testValue}</h3>
-          </div>
-  
-  <div className="col">
-            <h3>Update stock value</h3>
-            <button type="submit" className="btn btn-dark" 
-  onClick={updateStockValue}>Update</button>
-          </div>
-          
-          
-          
-        <form onSubmit={updateStockValue} style={{ margin: '20px' }}>
-            <label style={{ marginRight: '10px' }}>
-              New stock value:
-              <input type="text" ref={inputRef} style={{ marginLeft: '5px' }} />
-            </label>
-            <button type="submit" style={{ display: 'block', marginTop: '10px' }}>
-              Submit
-            </button>
-          </form>  
-          
-          
-          h3 {
-    text-align: center;
-    text-transform: uppercase;
-    color: #4CAF50;
-  }
-    
-  input[type=text] {
-    width: 20%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 3px solid #0df005;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }*/ 
